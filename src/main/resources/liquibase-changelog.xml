@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+      http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <!-- Таблица roles -->
+    <changeSet id="1" author="author1">
+        <createTable tableName="roles">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Таблица managers -->
+    <changeSet id="2" author="author1">
+        <createTable tableName="managers">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="manager_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="manager_password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="manager_email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="role_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="managers"
+                baseColumnNames="role_id"
+                constraintName="fk_role_id"
+                referencedTableName="roles"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <!-- Таблица cars -->
+    <changeSet id="3" author="author1">
+        <createTable tableName="cars">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="brand" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="color" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_added" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="manager_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="cars"
+                baseColumnNames="manager_id"
+                constraintName="fk_manager_id"
+                referencedTableName="managers"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <!-- Наполнение таблицы roles -->
+    <changeSet id="4" author="author1">
+        <insert tableName="roles">
+            <column name="name" value="USER"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="ADMIN"/>
+        </insert>
+    </changeSet>
+
+
+    <changeSet id="5" author="Vadim">
+        <insert tableName="managers">
+            <column name="manager_name" value="John Week"/>
+            <column name="manager_password" value="$2a$10$X5wFBtLrL/kHcmrOGGTrG.Os9ztpoYmO7kK.TWZW9p2WnHLNdRfDq"/>
+            <column name="manager_email" value="admin@gmail.com"/>
+            <column name="role_id" valueNumeric="2"/>
+        </insert>
+    </changeSet>
+
+
+    <changeSet id="6" author="Vadim">
+        <insert tableName="cars">
+            <column name="brand" value="BMW"/>
+            <column name="model" value="X5"/>
+            <column name="year" valueNumeric="2021"/>
+            <column name="color" value="Черный"/>
+            <column name="price" valueNumeric="55000"/>
+            <column name="date_added" valueDate="2024-01-01T10:00:00"/>
+            <column name="status" value="AVAILABLE"/>
+            <column name="manager_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
+
